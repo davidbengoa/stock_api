@@ -55,7 +55,10 @@ public class TradesByMonthOrDay {
         }
 
         int currentTime = Integer.parseInt(startTime);
-        if (currentTime < 1000) {
+        if (currentTime < 930) {
+            timeframe.put(TF_04_AND_09.name(), Utils.roundTo2Decimal(
+                    timeframe.getOrDefault(TF_04_AND_09.name(), 0.0) + amount));
+        } else if (currentTime < 1000) {
             timeframe.put(TF_09_AND_10.name(), Utils.roundTo2Decimal(
                     timeframe.getOrDefault(TF_09_AND_10.name(), 0.0) + amount));
         } else if (currentTime < 1100) {
@@ -76,6 +79,9 @@ public class TradesByMonthOrDay {
         } else if (currentTime <= 1600) {
             timeframe.put(TF_15_AND_16.name(), Utils.roundTo2Decimal(
                     timeframe.getOrDefault(TF_15_AND_16.name(), 0.0) + amount));
+        } else {
+            timeframe.put(TF_16_AND_20.name(), Utils.roundTo2Decimal(
+                    timeframe.getOrDefault(TF_16_AND_20.name(), 0.0) + amount));
         }
         timeframe.put(TF_TOTAL.name(), Utils.roundTo2Decimal(
                 timeframe.getOrDefault(TF_TOTAL.name(), 0.0) + amount));

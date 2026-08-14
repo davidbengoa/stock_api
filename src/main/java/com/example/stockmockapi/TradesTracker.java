@@ -3,7 +3,6 @@ package com.example.stockmockapi;
 import java.util.*;
 
 import static com.example.stockmockapi.Utils.TimeFrames.*;
-import static com.example.stockmockapi.Utils.TimeFrames.TF_15_AND_16;
 
 public class TradesTracker {
     String symbol;
@@ -91,6 +90,7 @@ public class TradesTracker {
         content.append("Profit %").append(",");
         content.append("Initial Balance").append(",");
         content.append("End Balance").append(",");
+        content.append("04:00-09:30").append(",");
         content.append("09:30-10:00").append(",");
         content.append("10:00-11:00").append(",");
         content.append("11:00-12:00").append(",");
@@ -98,6 +98,7 @@ public class TradesTracker {
         content.append("13:00-14:00").append(",");
         content.append("14:00-15:00").append(",");
         content.append("15:00-16:00").append(",");
+        content.append("16:00-20:00").append(",");
         content.append("Total").append(",");
 //        content.append("TradeIniBalance").append(",");
 //        content.append("TradeEndBalance").append(",");
@@ -107,6 +108,7 @@ public class TradesTracker {
         double totalTrades = 0;
         double totalProfit = 0;
         double totalProfitPerc = 0;
+        double total0409 = 0;
         double total0910 = 0;
         double total1011 = 0;
         double total1112 = 0;
@@ -114,6 +116,7 @@ public class TradesTracker {
         double total1314 = 0;
         double total1415 = 0;
         double total1516 = 0;
+        double total1620 = 0;
         double totalTotal = 0;
         for (String yyyyMMdd : dailyKeys) {
             TradesByMonthOrDay trade = tradesByDay.get(yyyyMMdd);
@@ -132,6 +135,8 @@ public class TradesTracker {
             Map<String, Double> timeframe = Utils.getTimeFrames();
             for (String symbolElem: trade.getSymbols().keySet()) {
                 Map<String, Double> tfSymbol = trade.getSymbols().get(symbolElem);
+                timeframe.put(TF_04_AND_09.name(), Utils.roundTo2Decimal(
+                    timeframe.get(TF_04_AND_09.name()) + tfSymbol.get(TF_04_AND_09.name())));
                 timeframe.put(TF_09_AND_10.name(), Utils.roundTo2Decimal(
                     timeframe.get(TF_09_AND_10.name()) + tfSymbol.get(TF_09_AND_10.name())));
                 timeframe.put(TF_10_AND_11.name(), Utils.roundTo2Decimal(
@@ -146,8 +151,11 @@ public class TradesTracker {
                         timeframe.get(TF_14_AND_15.name()) + tfSymbol.get(TF_14_AND_15.name())));
                 timeframe.put(TF_15_AND_16.name(), Utils.roundTo2Decimal(
                         timeframe.get(TF_15_AND_16.name()) + tfSymbol.get(TF_15_AND_16.name())));
+                timeframe.put(TF_16_AND_20.name(), Utils.roundTo2Decimal(
+                        timeframe.get(TF_16_AND_20.name()) + tfSymbol.get(TF_16_AND_20.name())));
                 timeframe.put(TF_TOTAL.name(), Utils.roundTo2Decimal(
                         timeframe.get(TF_TOTAL.name()) + tfSymbol.get(TF_TOTAL.name())));
+                total0409 += tfSymbol.get(TF_04_AND_09.name());
                 total0910 += tfSymbol.get(TF_09_AND_10.name());
                 total1011 += tfSymbol.get(TF_10_AND_11.name());
                 total1112 += tfSymbol.get(TF_11_AND_12.name());
@@ -155,8 +163,10 @@ public class TradesTracker {
                 total1314 += tfSymbol.get(TF_13_AND_14.name());
                 total1415 += tfSymbol.get(TF_14_AND_15.name());
                 total1516 += tfSymbol.get(TF_15_AND_16.name());
+                total1620 += tfSymbol.get(TF_16_AND_20.name());
                 totalTotal += tfSymbol.get(TF_TOTAL.name());
             }
+            line.append(timeframe.get(TF_04_AND_09.name())).append(",");
             line.append(timeframe.get(TF_09_AND_10.name())).append(",");
             line.append(timeframe.get(TF_10_AND_11.name())).append(",");
             line.append(timeframe.get(TF_11_AND_12.name())).append(",");
@@ -164,6 +174,7 @@ public class TradesTracker {
             line.append(timeframe.get(TF_13_AND_14.name())).append(",");
             line.append(timeframe.get(TF_14_AND_15.name())).append(",");
             line.append(timeframe.get(TF_15_AND_16.name())).append(",");
+            line.append(timeframe.get(TF_16_AND_20.name())).append(",");
             line.append(Utils.roundTo2Decimal(timeframe.get(TF_TOTAL.name()))).append(",");
 
 //            line.append(trade.getInitBalancePerTrade()).append(",");
@@ -180,6 +191,7 @@ public class TradesTracker {
         content.append(Utils.roundTo2Decimal(totalProfitPerc)).append(",");
         content.append("").append(",");
         content.append("").append(",");
+        content.append(Utils.roundTo2Decimal(total0409)).append(",");
         content.append(Utils.roundTo2Decimal(total0910)).append(",");
         content.append(Utils.roundTo2Decimal(total1011)).append(",");
         content.append(Utils.roundTo2Decimal(total1112)).append(",");
@@ -187,6 +199,7 @@ public class TradesTracker {
         content.append(Utils.roundTo2Decimal(total1314)).append(",");
         content.append(Utils.roundTo2Decimal(total1415)).append(",");
         content.append(Utils.roundTo2Decimal(total1516)).append(",");
+        content.append(Utils.roundTo2Decimal(total1620)).append(",");
         content.append(Utils.roundTo2Decimal(totalTotal));
 
         String now = Utils.customDateTime("yyyyMMdd-HHmmss");

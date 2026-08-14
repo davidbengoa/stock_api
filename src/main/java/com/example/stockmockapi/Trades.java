@@ -39,7 +39,8 @@ public class Trades {
             this.balance += amount;
         }
         tradesTracker.trackOrder(symbol, type, amount, dateTime.substring(0, 8),
-                dateTime.substring(8), iniBalance, price, bollingerLower, bollingerUpper);
+                dateTime.length() >= 12 ? dateTime.substring(8, 12) : dateTime.substring(8),
+                iniBalance, price, bollingerLower, bollingerUpper);
     }
 
     public void showStats() {

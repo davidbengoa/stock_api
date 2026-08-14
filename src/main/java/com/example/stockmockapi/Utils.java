@@ -12,6 +12,7 @@ import static com.example.stockmockapi.Utils.TimeFrames.TF_15_AND_16;
 
 public class Utils {
     public enum TimeFrames {
+        TF_04_AND_09,
         TF_09_AND_10,
         TF_10_AND_11,
         TF_11_AND_12,
@@ -19,6 +20,7 @@ public class Utils {
         TF_13_AND_14,
         TF_14_AND_15,
         TF_15_AND_16,
+        TF_16_AND_20,
         TF_TOTAL
     }
 
@@ -30,6 +32,7 @@ public class Utils {
     public static Map<String, Double> getTimeFrames() {
         Map<String, Double> timeframe = new HashMap<>();
         timeframe.put(TF_TOTAL.name(), 0.0);
+        timeframe.put(TF_04_AND_09.name(), 0.0);
         timeframe.put(TF_09_AND_10.name(), 0.0);
         timeframe.put(TF_10_AND_11.name(), 0.0);
         timeframe.put(TF_11_AND_12.name(), 0.0);
@@ -37,6 +40,7 @@ public class Utils {
         timeframe.put(TF_13_AND_14.name(), 0.0);
         timeframe.put(TF_14_AND_15.name(), 0.0);
         timeframe.put(TF_15_AND_16.name(), 0.0);
+        timeframe.put(TF_16_AND_20.name(), 0.0);
         return timeframe;
     }
 
@@ -79,9 +83,21 @@ public class Utils {
     }
 
     public static String getDiffTime(String start, String end) {
-        int startTime = Integer.parseInt(start.substring(0, 2)) * 60 + Integer.parseInt(start.substring(2));
-        int endTime = Integer.parseInt(end.substring(0, 2)) * 60 + Integer.parseInt(end.substring(2));
+        String startHhmm = padHhmm(start);
+        String endHhmm = padHhmm(end);
+        int startTime = Integer.parseInt(startHhmm.substring(0, 2)) * 60 + Integer.parseInt(startHhmm.substring(2));
+        int endTime = Integer.parseInt(endHhmm.substring(0, 2)) * 60 + Integer.parseInt(endHhmm.substring(2));
         return String.valueOf(endTime - startTime);
+    }
+
+    public static String padHhmm(String hhmm) {
+        if (hhmm == null || hhmm.isEmpty()) {
+            return "0000";
+        }
+        if (hhmm.length() >= 4) {
+            return hhmm.substring(0, 4);
+        }
+        return String.format("%04d", Integer.parseInt(hhmm));
     }
 
     public static void printError(String str) {
